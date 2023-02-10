@@ -3,7 +3,7 @@
  */
 
 import { AppRegistry } from 'react-native';
-import LaunchPage from './src/page/main/launch/index'
+import App from './src/page/main/main';
 import { name as appName } from './app.json';
 
-AppRegistry.registerComponent(appName, () => LaunchPage);
+AppRegistry.registerComponent(appName, () => App);
