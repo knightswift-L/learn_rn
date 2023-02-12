@@ -3,5 +3,6 @@ import { Home, Launch } from "./route"
 
 export type StatckOptions = {
     Home: HomePageProps,
-    Launch: undefined
+    Launch: undefined,
+    Login:undefined,
 }

@@ -4,7 +4,8 @@ import LaunchPage from "./launch";
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { HomePage, HomePageProps } from "./home";
 import { StatckOptions } from "../../routes/types";
-import { Launch, Home } from "../../routes/route";
+import { Launch, Home, Login } from "../../routes/route";
+import { LoginPage } from "../authenticate/login";
 
 const Stack = createNativeStackNavigator<StatckOptions>();
 
@@ -12,7 +13,8 @@ export default function App(): JSX.Element {
     return (<NavigationContainer>
         <Stack.Navigator screenOptions={{
             headerShown: false
-        }} initialRouteName="Launch">
+        }} initialRouteName={Launch}>
+            <Stack.Screen name={Login} component={LoginPage} />
             <Stack.Screen name={Launch} component={LaunchPage} />
             <Stack.Screen name={Home} component={HomePage} />
         </Stack.Navigator>

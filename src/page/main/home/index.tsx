@@ -25,7 +25,7 @@ function BottomBar({ state, descriptors, navigation }: BottomTabBarProps) {
 
             return <TouchableOpacity onPress={() => {
                 navigation.navigate(state.index == 0 ? "MePage" : "ListPage")
-            }}>
+            }} key = {`${value.name}`}>
                 <View key={index}>
                     <View style={{ flexDirection: "column", justifyContent: "center", alignItems: "center" }} >
                         <Image source={icon} style={state.index == index ? { width: UID(24), height: UID(24) } : { width: UID(18), height: UID(18) }}></Image>

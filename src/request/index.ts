@@ -1,4 +1,4 @@
-
+import GlobalData from "../config/global";
 
 const defaultHeader = {};
 let currentEnv: "pro" | 'dev' | 'test' = 'dev';
@@ -61,6 +61,7 @@ function combineParameters(path: string, method: string, options?: RequestOption
             headers: {
                 Accept: 'application/json',
                 'Content-Type': 'application/json',
+                'Authentication':GlobalData.token ?? ""
             },
             integrity: "",
             keepalive: false,
@@ -81,7 +82,6 @@ function combineParameters(path: string, method: string, options?: RequestOption
 }
 
 function printLog(url: string, data: Record<string, any>, header: Record<string, any>) {
-    console.log("===============================================");
     console.log(`${Date.now().toLocaleString()}\n`)
     console.log(url + "\n");
     for (const [key, value] of Object.entries(header)) {
