@@ -9,7 +9,6 @@ import { UID } from '../../../utils/screen_util';
 import { to_do, to_do_selected, mine, mine_selected } from '../../../assets';
 import { BottomTabBarProps, createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 export type HomePageProps = {
-    id: String
 }
 const Tab = createBottomTabNavigator();
 
@@ -25,7 +24,7 @@ function BottomBar({ state, descriptors, navigation }: BottomTabBarProps) {
 
             return <TouchableOpacity onPress={() => {
                 navigation.navigate(state.index == 0 ? "MePage" : "ListPage")
-            }} key = {`${value.name}`}>
+            }} key={`${value.name}`}>
                 <View key={index}>
                     <View style={{ flexDirection: "column", justifyContent: "center", alignItems: "center" }} >
                         <Image source={icon} style={state.index == index ? { width: UID(24), height: UID(24) } : { width: UID(18), height: UID(18) }}></Image>
@@ -38,7 +37,7 @@ function BottomBar({ state, descriptors, navigation }: BottomTabBarProps) {
 }
 
 
-export function HomePage({ navigation, route: { params: { id } } }: NativeStackScreenProps<StatckOptions, 'Home'>): JSX.Element {
+export function HomePage({ navigation, route }: NativeStackScreenProps<StatckOptions, 'Home'>): JSX.Element {
     return <Tab.Navigator tabBar={(props) => <BottomBar {...props} />} screenOptions={{ headerShown: false }}>
         <Tab.Screen name="ListPage" component={ListFragment} />
         <Tab.Screen name="MePage" component={MeFragment} />

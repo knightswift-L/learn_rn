@@ -6,7 +6,7 @@ let currentEnv: "pro" | 'dev' | 'test' = 'dev';
 function getHost(): string {
     let host = ""
     switch (currentEnv) {
-        case 'dev': host = "https://api.spacexdata.com"; break;
+        case 'dev': host = "http://localhost:8080"; break;
         case 'test': host = ""; break;
         case 'pro': host = ""; break;
     }
@@ -17,28 +17,34 @@ export type RequestOptions = {
     parameter?: Record<string, any>,
     data?: Record<string, any>,
     header?: Record<string, any>,
+    isFormData: boolean
 }
 
 export function updateEnv(env: "pro" | 'dev' | 'test' = 'dev') {
     currentEnv = env;
 }
 
-export function get(url: string, options?: RequestOptions): Promise<Response> {
-    return combineParameters(url, "GET", options);
+export function get<T>(url: string, options?: RequestOptions): Promise<T> {
+    return combineParameters<T>(url, "GET", options);
 }
 
-export function post(url: string, options?: RequestOptions): Promise<Response> {
-    return combineParameters(url, "POST", options);
+export function post<T>(url: string, options?: RequestOptions): Promise<T> {
+    return combineParameters<T>(url, "POST", options);
 }
 
-function combineParameters(path: string, method: string, options?: RequestOptions): Promise<any> {
+function combineParameters<T>(path: string, method: string, options?: RequestOptions): Promise<T> {
     let host = getHost();
     let requestUrl = `${host}${path}`;
 
-    let targetHeader = defaultHeader;
+    let targetHeader = Object.assign({}, {
+        Accept: 'application/json',
+        'Content-Type': 'application/json',
+        'Authorization': GlobalData.token ?? ""
+    });
     const { data, parameter, header: custom } = options ?? {};
+
     if (custom) {
-        targetHeader = Object.assign({}, defaultHeader, custom);
+        targetHeader = Object.assign({}, targetHeader, custom);
     }
     if (method == "GET" && parameter) {
         requestUrl = requestUrl + "?" + Object.entries(parameter).map((key, value) => {
@@ -53,30 +59,32 @@ function combineParameters(path: string, method: string, options?: RequestOption
     if (currentEnv == 'dev') {
         printLog(requestUrl, data ?? parameter ?? {}, targetHeader);
     }
-
     return new Promise(async (resolve, reject) => {
         let response: Response = await fetch(requestUrl, {
-            body: method == "POST" && data ? JSON.stringify(data) : null,
+            body: method == "POST" ? options?.isFormData ? data as FormData : JSON.stringify(data) : null,
             credentials: "omit",
-            headers: {
-                Accept: 'application/json',
-                'Content-Type': 'application/json',
-                'Authentication':GlobalData.token ?? ""
-            },
+            headers: targetHeader,
             integrity: "",
             keepalive: false,
             method: method,
-            mode: "no-cors"
+            mode: "cors",
         });
 
-        const { headers, url } = response;
-        var result = await response.json();
-        printLog(url, result, headers);
-
-        if (response.status == 200) {
-            resolve(result);
-        } else {
-            reject(Error(response.statusText))
+        try {
+            const { headers, url } = response;
+            console.log(response.status)
+            if (response.status == 200) {
+                var json = await response.json();
+                if (currentEnv == 'dev') {
+                    printLog(url, json, headers);
+                }
+                resolve(json);
+            } else {
+                reject(Error(response.statusText))
+            }
+        } catch (error) {
+            console.log(error);
+            reject(Error(JSON.stringify(error)))
         }
     })
 }
