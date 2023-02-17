@@ -17,7 +17,6 @@ export type RequestOptions = {
     parameter?: Record<string, any>,
     data?: Record<string, any>,
     header?: Record<string, any>,
-    isFormData: boolean
 }
 
 export function updateEnv(env: "pro" | 'dev' | 'test' = 'dev') {
@@ -61,7 +60,7 @@ function combineParameters<T>(path: string, method: string, options?: RequestOpt
     }
     return new Promise(async (resolve, reject) => {
         let response: Response = await fetch(requestUrl, {
-            body: method == "POST" ? options?.isFormData ? data as FormData : JSON.stringify(data) : null,
+            body: method == "POST" ? JSON.stringify(data) : null,
             credentials: "omit",
             headers: targetHeader,
             integrity: "",

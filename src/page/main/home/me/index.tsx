@@ -1,26 +1,32 @@
 import { useState, useEffect, useCallback } from 'react';
 import { StatusBar, Text, TouchableOpacity, View, Image } from 'react-native';
-import { getUserInfo } from '../../../../api/user';
-import AppBar from '../../../../components/app-bar';
+import { getUserInfo, updateUserInfo } from '../../../../api/user';
 import { UserInfoRes } from '../../../../types/user-info-res';
 import { launchCamera, launchImageLibrary } from 'react-native-image-picker';
-import { UID } from '../../../../utils/screen_util';
-import { post } from '../../../../request';
 import { uploadFile } from '../../../../api/upload';
-import Scalfold from '../../../../components/scalfold';
 import Style from './index.style';
-export function MeFragment(): JSX.Element {
+import { CustomButton, Scalfold } from '../../../../components';
+import { Result } from '../../../../types/common';
+import { UID } from '../../../../utils/screen_util';
+import { MeStackOptions } from '..';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
+export function MeFragment({ navigation }: NativeStackScreenProps<MeStackOptions, "MePage">): JSX.Element {
     const [userInfo, setUserInfo] = useState<UserInfoRes | undefined>()
     const [image, setImage] = useState<string>("http://localhost:8080/uploads/image_1676345847717.jpg");
-    useEffect(() => {
-        getUserInfo<UserInfoRes>().then((res) => {
+
+    const getCurrentUserInfo = useCallback(() => {
+        getUserInfo<Result<UserInfoRes>>().then((res) => {
             if (res.code == 200) {
                 setUserInfo(res.data)
+                setImage(res.data?.avatar ?? "")
             }
         }).catch((error: Error) => {
             console.log(error.message)
         });
-    }, [userInfo])
+    }, [])
+    useEffect(() => {
+        getCurrentUserInfo();
+    }, [])
 
     const onTapImage = useCallback(() => {
         launchImageLibrary({ selectionLimit: 1, mediaType: 'photo' }).then(async (value) => {
@@ -36,7 +42,13 @@ export function MeFragment(): JSX.Element {
                 var formData = new FormData();
                 formData.append("file", photo);
                 uploadFile(formData).then((value) => {
-                    setImage(`http://localhost:8080/${value.data?.images[0] ?? ""}`)
+                    if (value.code == 200 && value.data?.images && value.data.images.length != 0) {
+                        updateUserInfo<Record<string, any>>({ avatar: value.data?.images[0] }).then((response) => {
+                            if (response.code == 200) {
+                                getCurrentUserInfo();
+                            }
+                        })
+                    }
                 }).catch((error) => {
 
                 });
@@ -49,13 +61,22 @@ export function MeFragment(): JSX.Element {
     return <Scalfold>
         <View style={Style.headerContainer}>
             <TouchableOpacity onPress={onTapImage}>
-                {image.length != 0 && <Image style={Style.avatar} source={{ uri: image }} />}
+                {image.length != 0 && <Image style={Style.avatar} source={{ uri: `http://localhost:8080/${image}` }} />}
                 {image.length == 0 && <View style={Style.avatar} />}
             </TouchableOpacity>
             <View style={Style.headerRightContainer}>
-                <Text>{userInfo?.nickName ?? userInfo?.phone}</Text>
+                <TouchableOpacity onPress={
+                    () => {
+                        navigation.navigate("UpdateNickName");
+                    }
+                }><Text>{userInfo?.nickName ?? userInfo?.phone}</Text>
+                </TouchableOpacity>
                 <Text>{userInfo?.phone}</Text>
             </View>
+        </View>
+        <View style={{ height: "45%" }}></View>
+        <View style={{ paddingHorizontal: UID(30), width: "100%" }}>
+            <CustomButton onPress={() => { }} title="退出" />
         </View>
     </Scalfold>
 }

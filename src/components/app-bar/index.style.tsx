@@ -11,7 +11,13 @@ const style = StyleSheet.create({
     barContainer: {
         height: UID(44),
         flexDirection: 'row',
-        backgroundColor: 'red'
+        justifyContent: 'center',
+        alignItems: 'center'
+    },
+    title: {
+        fontSize: UID(18),
+        fontWeight: "500",
+        color: 'black'
     }
 });
 

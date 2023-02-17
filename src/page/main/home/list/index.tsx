@@ -1,10 +1,13 @@
+
+import { BottomTabNavigationProp, BottomTabScreenProps } from '@react-navigation/bottom-tabs';
 import { StatusBar, Text, View } from 'react-native';
-import AppBar from '../../../../components/app-bar';
-import { UID } from '../../../../utils/screen_util';
+import { HomeStackOptions } from '..';
+import { AppBar } from '../../../../components';
+import { TabOptions } from '../../../../routes/types';
 
 
-export function ListFragment(props): JSX.Element {
+export function ListFragment({ }: BottomTabScreenProps<HomeStackOptions, "ListPage">): JSX.Element {
     return <View>
-        <AppBar title='' />
+        <AppBar title='' canPop={false} />
     </View>
 }
