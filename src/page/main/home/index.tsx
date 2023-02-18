@@ -1,6 +1,6 @@
 
 import React from 'react';
-import { createNativeStackNavigator, NativeStackScreenProps } from '@react-navigation/native-stack';
+import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { Image, TouchableOpacity, View } from 'react-native';
 import { StatckOptions, } from '../../../routes/types';
 import { ListFragment } from './list';
@@ -8,10 +8,7 @@ import { MeFragment } from './me';
 import { UID } from '../../../utils/screen_util';
 import { to_do, to_do_selected, mine, mine_selected } from '../../../assets';
 import { BottomTabBarProps, createBottomTabNavigator } from '@react-navigation/bottom-tabs';
-import UpdateNickNamePage from '../../user/update-nickname';
-export type HomePageProps = {
-}
-const Tab = createBottomTabNavigator();
+const Tab = createBottomTabNavigator<StatckOptions>();
 
 function BottomBar({ state, navigation }: BottomTabBarProps) {
     return <View style={{ height: UID(54), width: "100%", backgroundColor: "white", flexDirection: "row", justifyContent: "space-around", alignItems: "center" }}>
@@ -27,13 +24,9 @@ function BottomBar({ state, navigation }: BottomTabBarProps) {
 
                 console.log(state.history)
                 if (index == 0) {
-                    navigation.navigate('HomePage', {
-                        screen: "ListPage"
-                    });
+                    navigation.navigate('HomePage');
                 } else {
-                    navigation.navigate('SettingPage', {
-                        screen: 'MePage'
-                    });
+                    navigation.navigate('MePage');
                 }
             }
             } key={`${value.name}`}>
@@ -48,35 +41,9 @@ function BottomBar({ state, navigation }: BottomTabBarProps) {
 }
 
 
-const HomeStack = createNativeStackNavigator<HomeStackOptions>();
-const MeStack = createNativeStackNavigator<MeStackOptions>();
-
-export type HomeStackOptions = {
-    ListPage: undefined
-}
-
-export type MeStackOptions = {
-    MePage: undefined,
-    UpdateNickName: undefined
-}
-
-function HomeStackScreen() {
-    return <HomeStack.Navigator initialRouteName='ListPage' screenOptions={{ headerShown: false }}>
-        <HomeStack.Screen name='ListPage' component={ListFragment} />
-    </HomeStack.Navigator>
-}
-
-function MeStackScreen() {
-    return <MeStack.Navigator initialRouteName='MePage' screenOptions={{ headerShown: false }}>
-        <MeStack.Screen name='MePage' component={MeFragment} />
-        <MeStack.Screen name="UpdateNickName" component={UpdateNickNamePage} />
-    </MeStack.Navigator>
-}
-
-
 export function HomePage({ }: NativeStackScreenProps<StatckOptions, 'Home'>): JSX.Element {
     return <Tab.Navigator tabBar={(props) => <BottomBar {...props} />} screenOptions={{ headerShown: false }}>
-        <Tab.Screen name="HomePage" component={HomeStackScreen} />
-        <Tab.Screen name="SettingPage" component={MeStackScreen} />
+        <Tab.Screen name="HomePage" component={ListFragment} />
+        <Tab.Screen name="MePage" component={MeFragment} />
     </Tab.Navigator>
 }

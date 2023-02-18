@@ -1,14 +1,12 @@
-import { HomePageProps } from "../page/main/home"
+
 
 export type StatckOptions = {
-    Home: HomePageProps,
+    Home: undefined,
     Launch: undefined,
     Login: undefined,
     ResetPassword: undefined,
     Register: undefined,
-}
-
-export type TabOptions = {
+    UpdateNickName: undefined,
     HomePage: undefined,
-    SettingPage: undefined,
+    MePage: undefined,
 }

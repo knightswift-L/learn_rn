@@ -2,7 +2,7 @@ import React from "react";
 import { NavigationContainer } from '@react-navigation/native';
 import LaunchPage from "./launch";
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { HomePage, HomePageProps } from "./home";
+import { HomePage } from "./home";
 import { StatckOptions } from "../../routes/types";
 import { LoginPage } from "../authenticate/login";
 import { RegisterPage } from "../authenticate/register";
@@ -21,6 +21,7 @@ export default function App(): JSX.Element {
             <Stack.Screen name="ResetPassword" component={ResetPasswordPage} />
             <Stack.Screen name="Launch" component={LaunchPage} />
             <Stack.Screen name="Home" component={HomePage} />
+            <Stack.Screen name="UpdateNickName" component={UpdateNickNamePage} />
         </Stack.Navigator>
     </NavigationContainer>);
 }

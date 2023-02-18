@@ -8,9 +8,9 @@ import Style from './index.style';
 import { CustomButton, Scalfold } from '../../../../components';
 import { Result } from '../../../../types/common';
 import { UID } from '../../../../utils/screen_util';
-import { MeStackOptions } from '..';
-import { NativeStackScreenProps } from '@react-navigation/native-stack';
-export function MeFragment({ navigation }: NativeStackScreenProps<MeStackOptions, "MePage">): JSX.Element {
+import { StatckOptions } from '../../../../routes/types';
+import { BottomTabScreenProps } from '@react-navigation/bottom-tabs';
+export function MeFragment({ navigation }: BottomTabScreenProps<StatckOptions>): JSX.Element {
     const [userInfo, setUserInfo] = useState<UserInfoRes | undefined>()
     const [image, setImage] = useState<string>("http://localhost:8080/uploads/image_1676345847717.jpg");
 

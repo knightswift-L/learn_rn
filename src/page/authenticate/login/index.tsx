@@ -18,7 +18,7 @@ export function LoginPage({ navigation }: NativeStackScreenProps<StatckOptions, 
                 if (response.code == 200 && response.data) {
                     let token = response.data?.token!;
                     GlobalData.token = token;
-                    navigation.replace("Home", {})
+                    navigation.replace("Home")
                 }
             }).catch((error) => {
                 console.log(JSON.stringify(error))
