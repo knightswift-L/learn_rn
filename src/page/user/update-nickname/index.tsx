@@ -1,15 +1,31 @@
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useCallback, useState } from 'react';
 import { View } from 'react-native';
-import { updateUserInfo } from '../../../api/user';
+import { getUserInfo, updateUserInfo } from '../../../api/user';
 import { Scalfold, CustomInput, CustomButton, AppBar } from '../../../components/index';
+import { useCustomUser } from '../../../provider/useUser';
 import { StatckOptions } from '../../../routes/types';
+import { Result } from '../../../types/common';
+import { UserInfoRes } from '../../../types/user-info-res';
 import Style from './index.style';
 export default function UpdateNickNamePage({ navigation }: NativeStackScreenProps<StatckOptions, 'UpdateNickName'>): JSX.Element {
-    const [nickName, setNickName] = useState<string>();
+    const { user, setUser } = useCustomUser();
+    let nickName = user?.nickName ?? "";
     const submit = useCallback(() => {
-        updateUserInfo({ "nickName": nickName }).then((value) => {
-
+        updateUserInfo<Result<any>>({ "nickName": nickName }).then((value) => {
+            if (value.code == 200) {
+                return true;
+            } else {
+                throw Error()
+            }
+        }).then(() => {
+            return getUserInfo<Result<UserInfoRes>>();
+        }
+        ).then((value) => {
+            if (value.code == 200) {
+                setUser(value.data ?? null);
+                navigation.goBack();
+            }
         }).catch(() => { });
 
     }, [])
@@ -18,8 +34,8 @@ export default function UpdateNickNamePage({ navigation }: NativeStackScreenProp
     return <Scalfold appBar={<AppBar title='更新昵称' canPop={false} />}>
         <View style={Style.container}>
             <CustomInput hint='请输入您的昵称' onChange={(value) => {
-                setNickName(value);
-            }} value="" />
+                nickName = value;
+            }} value={nickName} />
             <CustomButton onPress={submit} title="确认" />
         </View>
     </Scalfold>

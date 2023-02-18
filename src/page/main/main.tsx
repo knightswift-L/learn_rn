@@ -8,20 +8,23 @@ import { LoginPage } from "../authenticate/login";
 import { RegisterPage } from "../authenticate/register";
 import { ResetPasswordPage } from "../authenticate/reset_password";
 import UpdateNickNamePage from "../user/update-nickname";
+import { CustomUserProvider } from "../../provider/useUser";
 
 const Stack = createNativeStackNavigator<StatckOptions>();
 
 export default function App(): JSX.Element {
-    return (<NavigationContainer>
-        <Stack.Navigator screenOptions={{
-            headerShown: false
-        }} initialRouteName={"Launch"}>
-            <Stack.Screen name="Login" component={LoginPage} />
-            <Stack.Screen name="Register" component={RegisterPage} />
-            <Stack.Screen name="ResetPassword" component={ResetPasswordPage} />
-            <Stack.Screen name="Launch" component={LaunchPage} />
-            <Stack.Screen name="Home" component={HomePage} />
-            <Stack.Screen name="UpdateNickName" component={UpdateNickNamePage} />
-        </Stack.Navigator>
-    </NavigationContainer>);
+    return (<CustomUserProvider>
+        <NavigationContainer>
+            <Stack.Navigator screenOptions={{
+                headerShown: false
+            }} initialRouteName={"Launch"}>
+                <Stack.Screen name="Login" component={LoginPage} />
+                <Stack.Screen name="Register" component={RegisterPage} />
+                <Stack.Screen name="ResetPassword" component={ResetPasswordPage} />
+                <Stack.Screen name="Launch" component={LaunchPage} />
+                <Stack.Screen name="Home" component={HomePage} />
+                <Stack.Screen name="UpdateNickName" component={UpdateNickNamePage} />
+            </Stack.Navigator>
+        </NavigationContainer>
+    </CustomUserProvider>);
 }

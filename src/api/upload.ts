@@ -4,7 +4,7 @@ import { UploadFileRes } from "../types/upload-file-res";
 export function uploadFile(data: FormData): Promise<Result<UploadFileRes>> {
     return new Promise((resolve, reject) => {
         var xhr = new XMLHttpRequest();
-        xhr.open('POST', `http://localhost:8080/upload/file`);
+        xhr.open('POST', `http://localhost:10556/upload/file`);
         console.log('OPENED', xhr.status);
 
         xhr.onprogress = function () {

@@ -1,12 +1,14 @@
 import GlobalData from "../config/global";
 
-const defaultHeader = {};
+const defaultHeader = {
+
+};
 let currentEnv: "pro" | 'dev' | 'test' = 'dev';
 
 function getHost(): string {
     let host = ""
     switch (currentEnv) {
-        case 'dev': host = "http://localhost:8080"; break;
+        case 'dev': host = "http://localhost:10556"; break;
         case 'test': host = ""; break;
         case 'pro': host = ""; break;
     }
@@ -38,7 +40,8 @@ function combineParameters<T>(path: string, method: string, options?: RequestOpt
     let targetHeader = Object.assign({}, {
         Accept: 'application/json',
         'Content-Type': 'application/json',
-        'Authorization': GlobalData.token ?? ""
+        'Authorization': GlobalData.token ?? "",
+        "Connection": "close"
     });
     const { data, parameter, header: custom } = options ?? {};
 
@@ -67,6 +70,7 @@ function combineParameters<T>(path: string, method: string, options?: RequestOpt
             keepalive: false,
             method: method,
             mode: "cors",
+
         });
 
         try {
