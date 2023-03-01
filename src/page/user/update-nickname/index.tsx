@@ -1,6 +1,6 @@
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { useCallback, useState } from 'react';
-import { View } from 'react-native';
+import { Alert, Modal, TouchableOpacity, View } from 'react-native';
 import { getUserInfo, updateUserInfo } from '../../../api/user';
 import { Scalfold, CustomInput, CustomButton, AppBar } from '../../../components/index';
 import { useCustomUser } from '../../../provider/useUser';
@@ -29,14 +29,14 @@ export default function UpdateNickNamePage({ navigation }: NativeStackScreenProp
         }).catch(() => { });
 
     }, [])
-
-
-    return <Scalfold appBar={<AppBar title='更新昵称' canPop={false} />}>
-        <View style={Style.container}>
-            <CustomInput hint='请输入您的昵称' onChange={(value) => {
-                nickName = value;
-            }} value={nickName} />
-            <CustomButton onPress={submit} title="确认" />
-        </View>
-    </Scalfold>
+    return <View>
+        <Scalfold appBar={<AppBar title='更新昵称' />}>
+            <View style={Style.container}>
+                <CustomInput hint='请输入您的昵称' onChange={(value) => {
+                    nickName = value;
+                }} value={nickName} />
+                <CustomButton onPress={submit} title="确认" />
+            </View>
+        </Scalfold>
+    </View>
 }

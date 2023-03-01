@@ -9,4 +9,5 @@ export type StatckOptions = {
     UpdateNickName: undefined,
     HomePage: undefined,
     MePage: undefined,
+    CategoryPage: undefined
 }

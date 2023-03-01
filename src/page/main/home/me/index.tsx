@@ -11,6 +11,8 @@ import { UID } from '../../../../utils/screen_util';
 import { StatckOptions } from '../../../../routes/types';
 import { BottomTabScreenProps } from '@react-navigation/bottom-tabs';
 import { useCustomUser } from '../../../../provider/useUser';
+import GlobalData from '../../../../config/global';
+import { useNavigation } from '@react-navigation/native';
 export function MeFragment({ navigation }: BottomTabScreenProps<StatckOptions>): JSX.Element {
     const { user, setUser } = useCustomUser();
 
@@ -56,7 +58,11 @@ export function MeFragment({ navigation }: BottomTabScreenProps<StatckOptions>):
 
         })
     }, [])
-
+    const logout = useCallback(() => {
+        GlobalData.token = null;
+        setUser(null);
+        // navigation.popUntil("Login");
+    }, [])
     return <Scalfold>
         <View style={Style.headerContainer}>
             <TouchableOpacity onPress={onTapImage}>
@@ -75,7 +81,7 @@ export function MeFragment({ navigation }: BottomTabScreenProps<StatckOptions>):
         </View>
         <View style={{ height: "45%" }}></View>
         <View style={{ paddingHorizontal: UID(30), width: "100%" }}>
-            <CustomButton onPress={() => { }} title="退出" />
+            <CustomButton onPress={logout} title="退出" />
         </View>
     </Scalfold>
 }

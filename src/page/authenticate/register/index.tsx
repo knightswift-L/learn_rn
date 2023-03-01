@@ -20,7 +20,7 @@ export function RegisterPage({ navigation }: NativeStackScreenProps<StatckOption
         });
     }, []);
 
-    return <Scalfold backgroundColor={"white"}>
+    return <Scalfold backgroundColor={"white"} appBar={<AppBar title='' />}>
         <View style={{ paddingHorizontal: UID(20), flexDirection: 'column', justifyContent: "flex-start", flex: 1, width: "100%", marginTop: `${100 - 61.8}%` }}>
             <View style={{ marginBottom: UID(40) }}>
                 <Logo />

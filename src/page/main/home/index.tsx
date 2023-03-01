@@ -5,13 +5,13 @@ import { Image, TouchableOpacity, View } from 'react-native';
 import { StatckOptions, } from '../../../routes/types';
 import { ListFragment } from './list';
 import { MeFragment } from './me';
-import { UID } from '../../../utils/screen_util';
+import { StatusBarHeight, StatusHeight, UID } from '../../../utils/screen_util';
 import { to_do, to_do_selected, mine, mine_selected } from '../../../assets';
 import { BottomTabBarProps, createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 const Tab = createBottomTabNavigator<StatckOptions>();
 
 function BottomBar({ state, navigation }: BottomTabBarProps) {
-    return <View style={{ height: UID(54), width: "100%", backgroundColor: "white", flexDirection: "row", justifyContent: "space-around", alignItems: "center" }}>
+    return <View style={{ height: StatusHeight, width: "100%", backgroundColor: "white", flexDirection: "row", justifyContent: "space-around", alignItems: "center", paddingBottom: StatusBarHeight }}>
         {state.routes.map((value, index) => {
             let icon = to_do_selected;
             if (state.index == index) {
