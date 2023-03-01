@@ -1,29 +1,18 @@
+import {Platform} from 'react-native';
 import GlobalData from "../config/global";
+import { getEnv } from '../utils/env';
+import { getHost } from '../utils/host_util';
 
 const defaultHeader = {
 
 };
-let currentEnv: "pro" | 'dev' | 'test' = 'dev';
 
-function getHost(): string {
-    let host = ""
-    switch (currentEnv) {
-        case 'dev': host = "http://localhost:10556"; break;
-        case 'test': host = ""; break;
-        case 'pro': host = ""; break;
-    }
-    return host;
-
-}
 export type RequestOptions = {
     parameter?: Record<string, any>,
     data?: Record<string, any>,
     header?: Record<string, any>,
 }
 
-export function updateEnv(env: "pro" | 'dev' | 'test' = 'dev') {
-    currentEnv = env;
-}
 
 export function get<T>(url: string, options?: RequestOptions): Promise<T> {
     return combineParameters<T>(url, "GET", options);
@@ -58,7 +47,7 @@ function combineParameters<T>(path: string, method: string, options?: RequestOpt
 
         }).join("&");
     }
-    if (currentEnv == 'dev') {
+    if (getEnv() == 'dev') {
         printLog(requestUrl, data ?? parameter ?? {}, targetHeader);
     }
     return new Promise(async (resolve, reject) => {
@@ -78,11 +67,12 @@ function combineParameters<T>(path: string, method: string, options?: RequestOpt
             console.log(response.status)
             if (response.status == 200) {
                 var json = await response.json();
-                if (currentEnv == 'dev') {
+                if (getEnv() == 'dev') {
                     printLog(url, json, headers);
                 }
                 resolve(json);
             } else {
+                console.log(response.statusText);
                 reject(Error(response.statusText))
             }
         } catch (error) {

@@ -1,10 +1,11 @@
 import { Result } from "../types/common";
 import { UploadFileRes } from "../types/upload-file-res";
+import { getHost } from "../utils/host_util";
 
 export function uploadFile(data: FormData): Promise<Result<UploadFileRes>> {
     return new Promise((resolve, reject) => {
         var xhr = new XMLHttpRequest();
-        xhr.open('POST', `http://localhost:10556/upload/file`);
+        xhr.open('POST', `${getHost()}/upload/file`);
         console.log('OPENED', xhr.status);
 
         xhr.onprogress = function () {
