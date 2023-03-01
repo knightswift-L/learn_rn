@@ -1,4 +1,4 @@
-export { AppBar } from './app-bar/index';
+export { AppBar, ActionView } from './app-bar/index';
 export { Scalfold } from './scalfold/index';
 export { CustomInput } from './custom-input/index';
 export { CustomButton } from './custom-button/index';
